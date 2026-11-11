@@ -11,6 +11,35 @@ and the infrastructure that makes ML experiments reproducible.
 
 ## Current work
 
+### [VeriBridge AI](https://github.com/machackgo/veribridge-ai) — AI-assisted verification and evidence platform for hiring
+
+A full-stack platform that turns a student's project work into evidence a recruiter can inspect. Students attach
+proof to a project; the system analyses it and produces a **Verified Build Report** with evidence labels for each
+claimed skill. Students choose what to publish on a public **Work Passport**, and recruiters search and compare
+published passports.
+
+- **Evidence workflows** — GitHub repository analysis through the GitHub API; website proofs recorded with a Chrome
+  extension and re-checked with Playwright browser runs and sentence-transformer similarity; PDF/DOCX document
+  proofs; a recorded "Project Defense" Q&A; candidate attribution kept separate from project evidence; optional LLM
+  claim synthesis with a deterministic fallback.
+- **Architecture** — Python/FastAPI API; Next.js 16 / React 19 / TypeScript web app on Vercel; Supabase Auth and
+  PostgreSQL (78 ordered SQL migrations) with Supabase Storage; a Chrome Manifest V3 recorder extension
+  ([published on the Chrome Web Store](https://chromewebstore.google.com/detail/veribridge-website-proof/gdogdgnaioldjldljniffcmkcdpdjlme))
+  whose recorder contract is shared with the web app's tests.
+- **Security controls** — JWT verification that fails closed on unexpected algorithms, ownership and role checks in
+  application code, Row Level Security on every migrated table as defence in depth, random-token public links that resolve
+  only while the owner's passport is public, response filtering for emails, storage paths and internal IDs,
+  production startup guards (no demo fallback, no wildcard CORS), and baseline security headers.
+- **Testing** — about 5,180 API tests (pytest), about 1,950 web unit tests (Vitest), extension tests and Playwright
+  end-to-end suites; production database policies were audited and hardened before release.
+
+Status: the website at [veribridgeai.com](https://veribridgeai.com) is live in **portfolio-preview mode**. The
+hosted API is currently paused, so sign-in workspaces, shared reports and other backend-dependent features are
+temporarily unavailable; the landing page and its product demonstration (sample data) work, and the full system
+runs locally from the repository. Source is MIT-licensed.
+
+`Python` `FastAPI` `Next.js` `TypeScript` `Supabase` `PostgreSQL` `Playwright` `Chrome Extension`
+
 ### [ULTRON](https://github.com/machackgo/ULTRON) — reasoning termination and teacher–student distillation
 
 Research infrastructure for studying whether a smaller Qwen student can learn *when to stop reasoning* from a
@@ -69,5 +98,5 @@ A synthetic, CPU-only demo and about 300 tests run with `pytest` in a few second
 
 - **ML / LLMs:** PyTorch, Hugging Face Transformers, PEFT (LoRA/QLoRA), knowledge distillation, model evaluation, scikit-learn
 - **NLP / retrieval:** RAG, sentence embeddings, semantic search, evidence provenance
-- **Systems:** Python, Java, SQL, Linux, Slurm/HPC, FastAPI, Docker/Compose, GitHub Actions
+- **Systems:** Python, Java, SQL, TypeScript, Linux, Slurm/HPC, FastAPI, Next.js, PostgreSQL/Supabase, Docker/Compose, GitHub Actions
 - **Cloud / MLOps:** Google Cloud Run, AWS and Azure coursework, Terraform, Ansible, Prometheus, Grafana
